@@ -18,7 +18,7 @@ rBottom = s^2 - 1
 
   
 exampleStr :: [Char]
-exampleStr =  "...1"++
+exampleStr =  "....1"++
               ".9..."++
               ".88.."++
               "....4"++
@@ -41,7 +41,7 @@ splitEvery n list = first : splitEvery n rest
 --someFunc = print (getSquare rBottom s resultStr 'b')
 --someFunc = print (solve exampleStr 0 25 5 resultStr)
 
-result1 = splitEvery 5 (solver 0 24 5 exampleStr resultStr)
+result1 = splitEvery 5 (solve exampleStr 0 25 5 resultStr)
 
 someFunc= do 
   print(result1!!0)
@@ -214,7 +214,7 @@ getSquare i s_size pix c
 -- wywołuje próbe pokolorowania dla każdego znaczączego elementu planszy
 -- leci po kolei przez plansze, próbuje kolorować
 -- i - indeks dla którego zaczynamy rozwiązywanie 
--- n - największy indeks w tablicy będącej planszą
+-- n - dlugosc listy (planszy)
 -- s_size - długość boku planszy
 -- pix - plansza 
 -- result -- obecny stan pokolorowania planszy (kwadrat s_size x s_size wypełniany podczas rozwiązywania)
@@ -233,5 +233,5 @@ solver i n s_size pix result
 solve :: [Char] -> Int -> Int -> Int -> [Char] -> [Char]
 solve pix iter n s_size result = if iter >= n 
                           then result 
-                            else solve pix (iter+1) n s_size (solver 0 (s_size^2 - 1) s_size pix result)
+                            else solve pix (iter+1) n s_size (solver 0 (s_size^2) s_size pix result)
 
