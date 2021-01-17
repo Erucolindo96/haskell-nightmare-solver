@@ -13,6 +13,8 @@ test_results = "nwnnn"++
                "nwbnn"++
                "nnnnn"++
                "nnnnn"
+               
+               
 s_size = 5
   
 lTop = 0 
@@ -20,7 +22,8 @@ lBottom = s_size * (s_size - 1)
 rTop = s_size - 1
 rBottom = s_size^2 - 1
 
---getSquare i s_size pix
+
+
 main = do 
   --testy getSquare
   --rogi 
@@ -37,12 +40,7 @@ main = do
   print(Lib.getSquare 16 s_size test_pix '.' == "3.7.6....")  -- 4 wiersz, 2 element
 
 
---
---test_results = "nwnnn"++
---               "nnwnn"++
---               "nwbnn"++
---               "nnnnn"++
---               "nnnnn"
+
 
   --metoda fill - zamaluj lewy górny 2x2
   print(Lib.fill 'b' 0 [0, 1, s_size, s_size+1] test_results  ==  "bwnnn"++
@@ -132,5 +130,10 @@ main = do
                                                   s_size, s_size + 1, s_size + 2, 
                                                   s_size*2, s_size*2 + 1, s_size*2 + 2
                                                   ])
+                                                  
+                                                  
+  -- rozwiaz zagadke dla 5x5 
+--  print (splitEvery s_size (solve pixAsString 0 (s_size^2) s_size resultStr) == )
+                                                  
     
                                                   
