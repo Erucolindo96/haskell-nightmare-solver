@@ -81,23 +81,23 @@ count x = length . filter (x==)
 returnSquareIndexes :: Int -> Int -> [Int]
 returnSquareIndexes i s_size
   | i == leftTop = --jestes w lewym górnym rogu
-    [i, i+1, i+s_size, i+(s_size+1)]
+    [i, i+1, i+s_size, i+s_size+1]
   | i == rightTop = --jestes w prawym gornym rogu
-    [i-1, i, i+(s_size-1),i+s_size]
+    [i-1, i, i+s_size-1,i+s_size]
   | i == leftBottom = -- jestes w lewym dolnym  
     [i-s_size, i-s_size + 1, i, i+1]
   | i == rightBottom = --jestes w prawym dolnym rogu
     [ i-s_size-1, i-s_size ,i-1, i]
   | i > leftTop && i < rightTop = --jestes w gornej czesci
-    [i-1, i, i+1,i+(s_size-1), i+s_size, i+(s_size+1)]
+    [i-1, i, i+1,i+s_size-1, i+s_size, i+s_size+1]
   | i > leftBottom && i < rightBottom = --jestes w dolnej czesci
     [ i-s_size-1, i-s_size, i-s_size+1, i-1, i, i+1]
   | i `mod` s_size == 0 = --jestes w lewej czesci
-    [i-s_size, i-s_size+1, i, i+1, i+s_size, i +(s_size+1)]
+    [i-s_size, i-s_size+1, i, i+1, i+s_size, i +s_size+1]
   | i `mod` s_size == s_size - 1 =  -- jestes w prawej czesci
-    [i-s_size-1, i-s_size, i-1, i, i+(s_size-1), i+s_size]
+    [i-s_size-1, i-s_size, i-1, i, i+s_size-1, i+s_size]
   | otherwise =  --jestes w srodku macierzy
-    [i-s_size-1, i-s_size, i-s_size+1, i-1, i, i+1, i+(s_size-1), i+s_size, i+(s_size+1)]
+    [i-s_size-1, i-s_size, i-s_size+1, i-1, i, i+1, i+s_size-1, i+s_size, i+s_size+1]
   where
     leftTop = 0 
     leftBottom = s_size * (s_size - 1)

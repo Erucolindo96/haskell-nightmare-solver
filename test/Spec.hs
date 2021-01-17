@@ -37,12 +37,45 @@ main = do
   print(Lib.getSquare 16 s_size test_pix '.' == "3.7.6....")  -- 4 wiersz, 2 element
 
 
+--
+--test_results = "nwnnn"++
+--               "nnwnn"++
+--               "nwbnn"++
+--               "nnnnn"++
+--               "nnnnn"
+
   --metoda fill - zamaluj lewy górny 2x2
   print(Lib.fill 'b' 0 [0, 1, s_size, s_size+1] test_results  ==  "bwnnn"++
                                                                          "bbwnn"++
                                                                          "nwbnn"++
                                                                          "nnnnn"++
                                                                          "nnnnn")
+
+  --metoda fill - zamaluj lewy dolny 2x2
+  print(Lib.fill 'b' 0 [s_size*3, s_size*3 + 1, 
+                        s_size*4, s_size*4 + 1] test_results  ==  "nwnnn"++
+                                                                  "nnwnn"++
+                                                                  "nwbnn"++
+                                                                  "bbnnn"++
+                                                                  "bbnnn")
+  --metoda fill - zamaluj prawy górny 2x2
+  print(Lib.fill 'b' 0 [3, 4, s_size + 3, s_size + 4] test_results  ==  
+                                                                   "nwnbb"++
+                                                                   "nnwbb"++
+                                                                   "nwbnn"++
+                                                                   "nnnnn"++
+                                                                   "nnnnn")
+  --metoda fill - zamaluj prawy dolny 2x2
+  print(Lib.fill 'b' 0 [s_size*3 + 3, s_size*3 + 4, 
+                        s_size*4 + 3, s_size*4 + 4] test_results  ==  
+                                                                  "nwnnn"++
+                                                                  "nnwnn"++
+                                                                  "nwbnn"++
+                                                                  "nnnbb"++
+                                                                  "nnnbb")
+
+
+
 
   --metoda fill - zamaluj srodek 3x3
   print(Lib.fill 'w' 0 [s_size + 1, s_size + 2, s_size + 3,
@@ -54,11 +87,50 @@ main = do
                                                  "nwwwn"++
                                                  "nnnnn")
 
+
+
+
+
+
+
   -- metoda getSquareIndexes - zwroc prawy górny 2x2
   print(Lib.returnSquareIndexes 4 s_size == [3,4, s_size+3, s_size+4])
 
+  -- metoda getSquareIndexes - zwroc lewy górny 2x2
+  print(Lib.returnSquareIndexes 0 s_size == [0,1, s_size, s_size+1])
+  
+  -- metoda getSquareIndexes - zwroc prawy dolny 2x2
+  print(Lib.returnSquareIndexes (s_size^2 - 1) s_size == [s_size*3+3, s_size*3 +4, s_size*4 + 3, s_size*4 + 4])
+  
+  -- metoda getSquareIndexes - zwroc lewy dolny 2x2
+  print(Lib.returnSquareIndexes (s_size*4) s_size == [s_size*3, s_size*3 + 1, s_size*4, s_size*4 + 1])
+  
+
   -- metoda getSquareIndexes - zwroc dolny  2x3
   print(Lib.returnSquareIndexes (s_size*4 + 2) s_size == [s_size*3 + 1,s_size*3 + 2, s_size*3 + 3,
-                                                          s_size*4 + 1,s_size*4 + 2, s_size*4 + 3
-                                                         ])
-
+                                                            s_size*4 + 1,s_size*4 + 2, s_size*4 + 3
+                                                           ])
+  -- metoda getSquareIndexes - zwroc górny  2x3
+  print(Lib.returnSquareIndexes 2 s_size == [1, 2, 3,
+                                            s_size + 1, s_size + 2, s_size + 3
+                                            ])
+                                            
+  -- metoda getSquareIndexes - zwroc lewy  3x2
+  print(Lib.returnSquareIndexes s_size s_size == [0 ,1, 
+                                                  s_size, s_size + 1, 
+                                                  s_size*2, s_size*2 + 1
+                                                  ])
+-- metoda getSquareIndexes - zwroc prawy  2x3
+  print(Lib.returnSquareIndexes (s_size + 4) s_size == 
+                                                  [3 , 4, 
+                                                  s_size + 3, s_size + 4, 
+                                                  s_size*2 + 3, s_size*2 + 4
+                                                  ])
+  -- metoda getSquareIndexes - zwroc lewy gorno-diagonalny 3x3
+  print(Lib.returnSquareIndexes (s_size + 1) s_size == 
+                                                  [0 , 1, 2 ,
+                                                  s_size, s_size + 1, s_size + 2, 
+                                                  s_size*2, s_size*2 + 1, s_size*2 + 2
+                                                  ])
+    
+                                                  
