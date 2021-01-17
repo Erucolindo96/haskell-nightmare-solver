@@ -110,13 +110,13 @@ fill c i indexes (r:restResults)
 processOneSquare :: Int -> Int -> [Char] -> [Char] -> [Char] -> [Char]
 processOneSquare i s_size pix square_result result 
  | field_num == 0 = --zamaluj wszystko na bialo
-  fill 'w' i (returnSquareIndexes i s_size) result
+  fill 'w' 0 (returnSquareIndexes i s_size) result
  | field_num == 9 = --zamaluj wszystko na czarno
-  fill 'b' i (returnSquareIndexes i s_size) result
+  fill 'b' 0 (returnSquareIndexes i s_size) result
  | field_num == b_cnt = -- zamaluj wszystkie ny na biało
-  fill 'w' i (returnSquareIndexes i s_size) result
+  fill 'w' 0 (returnSquareIndexes i s_size) result
  | b_n_sum == field_num = --jest tyle pól niepokolorowanych co liczba w srodku kwadratu
-  fill 'b' i (returnSquareIndexes i s_size) result
+  fill 'b' 0 (returnSquareIndexes i s_size) result
  | otherwise = result
  where 
   field_num = digitToInt (pix!!i) 
