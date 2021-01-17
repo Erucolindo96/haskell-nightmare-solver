@@ -60,7 +60,8 @@ square_size = 5
 count :: Eq a => a -> [a] -> Int
 count x = length . filter (x==) 
  
-
+-- i - indeks elementu bedacego srodkiem kwadratu 3x3
+-- s_size - długośc boku planszy
 returnSquareIndexes :: Int -> Int -> [Int]
 returnSquareIndexes i s_size
   | i == leftTop = --jestes w lewym górnym rogu
@@ -87,28 +88,38 @@ returnSquareIndexes i s_size
     rightTop = s_size - 1
     rightBottom = s_size^2 - 1
 
-fill :: Char -> Int -> Int -> [Int] -> [Char] -> [Char]    
-fill _ _ _ _ [] = []    
-fill c i size indexes (r:restResults)
- | i `elem` indexes && r == 'n' = c:fill c (i+1) size indexes restResults
- | otherwise = r:fill c (i+1) size indexes restResults
+-- c - znak ktory wstawiamy
+-- i - indeks aktualnie obrabianego punktu w przekazanej liście(planszy)
+-- indexes - indeksy listy (r:restResults) które mamy spróbować zamalować(zamienić 'n' na wskazany jako c znak)
+-- (r:restResults) - lista której elementy malujemy (plansza resultatów)
+-- 
+fill :: Char -> Int -> [Int] -> [Char] -> [Char]    
+fill _ _ _ [] = []    
+fill c i indexes (r:restResults)
+ | i `elem` indexes && r == 'n' = c:fill c (i+1) indexes restResults
+ | otherwise = r:fill c (i+1) indexes restResults
 
 
      
 -- dostajesz kwadrat 3x3 i result - sprobuj go pokolorować  
+-- i - srodek kwadratu 3x3 który próbujemy pomalować
+-- s_size - długośc boku planszy
+-- pix - plansza z cyframi
+-- square_result - kwadrat 3x3 o srodku w i (wycinek listy stanu pokolorować - wycinek result)
+-- result - lista będaca stanem pokolorowania planszy
 processOneSquare :: Int -> Int -> [Char] -> [Char] -> [Char] -> [Char]
-processOneSquare i s_size square square_result result 
+processOneSquare i s_size pix square_result result 
  | field_num == 0 = --zamaluj wszystko na bialo
-  fill 'w' i s_size (returnSquareIndexes i s_size) result
+  fill 'w' i (returnSquareIndexes i s_size) result
  | field_num == 9 = --zamaluj wszystko na czarno
-  fill 'b' i s_size (returnSquareIndexes i s_size) result
+  fill 'b' i (returnSquareIndexes i s_size) result
  | field_num == b_cnt = -- zamaluj wszystkie ny na biało
-  fill 'w' i s_size (returnSquareIndexes i s_size) result
+  fill 'w' i (returnSquareIndexes i s_size) result
  | b_n_sum == field_num = --jest tyle pól niepokolorowanych co liczba w srodku kwadratu
-  fill 'b' i s_size (returnSquareIndexes i s_size) result
+  fill 'b' i (returnSquareIndexes i s_size) result
  | otherwise = result
  where 
-  field_num = digitToInt (square!!4) 
+  field_num = digitToInt (pix!!i) 
   n_cnt = count 'n' square_result
   b_cnt = count 'b' square_result
 --  w_cnt = count 'w' square_result
@@ -184,18 +195,28 @@ getSquare i s_size pix c
 
 --processOneSquare i s_size square square_result result 
 
---proba rozwiazania zaczynając od elementu x
-solver :: Int -> Int -> [Char] -> [Char] -> [Char]
-solver i n pix result
+-- wywołuje próbe pokolorowania dla każdego znaczączego elementu planszy
+-- leci po kolei przez plansze, próbuje kolorować
+-- i - indeks dla którego zaczynamy rozwiązywanie 
+-- n - dlugosc stringa będacego planszą
+-- s_size - długość boku planszy
+-- pix - plansza 
+-- result -- obecny stan pokolorowania planszy (kwadrat s_size x s_size wypełniany podczas rozwiązywania)
+solver :: Int -> Int -> Int -> [Char] -> [Char] -> [Char]
+solver i n s_size pix result
   | i >= n = result
-  | pix!!i == '.' = solver (i+1) n pix result
-  | otherwise = solver (i+1) n pix (processOneSquare i n (getSquare i square_size pix '.') (getSquare i square_size result 'b') result)
+  | pix!!i == '.' = solver (i+1) n s_size pix result
+  | otherwise = solver (i+1) n s_size pix (processOneSquare i s_size pix (getSquare i s_size result 'w') result)
 
---glowna fcja programu - bierze "example", wypluwa "result"
+-- Wywołuje w każdej iteracji próbę pokolorowania dla wszystkich kwadratów 3x3 na planszy (ze znaczących pól)
+-- pix - plansza
+-- iter - obecna iteracja 
+-- n - ilosc iteracji
+-- result - obecny stan pokolorowania
 solve :: [Char] -> Int -> Int -> [Char] -> [Char]
-solve pix i n result = if i >= n 
+solve pix iter n result = if iter >= n 
                           then result 
-                            else solve pix (i+1) n (solver 0 n pix result)
+                            else solve pix (iter+1) n (solver 0 n (n*n) pix result)
 --solve _  result = result
 
 
