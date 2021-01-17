@@ -216,7 +216,7 @@ solver i n s_size pix result
 solve :: [Char] -> Int -> Int -> [Char] -> [Char]
 solve pix iter n result = if iter >= n 
                           then result 
-                            else solve pix (iter+1) n (solver 0 n (n*n) pix result)
+                            else solve pix (iter+1) n (solver 0 (n*n) n pix result)
 --solve _  result = result
 
 
