@@ -33,7 +33,7 @@ resultStr  = "nnnnn"++
 someFunc :: IO ()
                     
 --someFunc = print (getSquare rBottom s resultStr 'b')
-someFunc = print (solve exampleStr 0 25 resultStr)
+someFunc = print (solve exampleStr 0 25 5 resultStr)
 
 example :: [[Char]]
 example = 
@@ -212,11 +212,12 @@ solver i n s_size pix result
 -- pix - plansza
 -- iter - obecna iteracja 
 -- n - ilosc iteracji
+-- s_size = dlugosc boku planszy
 -- result - obecny stan pokolorowania
-solve :: [Char] -> Int -> Int -> [Char] -> [Char]
-solve pix iter n result = if iter >= n 
+solve :: [Char] -> Int -> Int -> Int -> [Char] -> [Char]
+solve pix iter n s_size result = if iter >= n 
                           then result 
-                            else solve pix (iter+1) n (solver 0 (n*n) n pix result)
+                            else solve pix (iter+1) n s_size (solver 0 (s_size^2) s_size pix result)
 --solve _  result = result
 
 
