@@ -5,16 +5,24 @@ module Lib
 import Data.Char (digitToInt)
 import System.IO (readFile)
 
-
 printResults :: IO ()
-printResults = do 
-  content <- readFile "/home/krzysztof/IdeaProjects/prywata/fill-a-pix/data/basic/20-na-20"
+printResults = do
+  filepath <- getLine 
+  -- content <- readFile "/home/jakub/SPOP/haskell-nightmare-solver/data/basic/20-na-20"
+  content <- readFile filepath
   let pix = read content ::[String]         --wczytana plansza
   let s_size = length pix                   --długość boku planszy
   let pixAsString = concat pix              --plansza jako pojedynczy string
   let resultStr = replicate (s_size^2) 'n'  --stan pokolorowania planszy
-  let results = splitEvery s_size (solve pixAsString 0 (s_size^2) s_size resultStr)
-  mapM_ print results
+  -- let results = splitEvery s_size (solve pixAsString 0 (s_size^2) s_size resultStr)
+  let results = solve pixAsString 0 (s_size^2) s_size resultStr
+  let visibleResults = splitEvery s_size (map printPretty results)
+  mapM_ print visibleResults
+
+printPretty :: Char -> Char  
+printPretty x = case x of 'w' -> ' '  
+                          'b' -> '@'   
+                          'n' -> 'n' 
 
 -- Dzieli liste na liste list. 
 -- Podział następuje co n elementów
