@@ -31,9 +31,25 @@ resultStr  = "nnnnn"++
              "nnnnn"
 
 someFunc :: IO ()
+
+splitEvery :: Int -> [a] -> [[a]]
+splitEvery _ [] = []
+splitEvery n list = first : splitEvery n rest
+  where
+    (first,rest) = splitAt n list
                     
 --someFunc = print (getSquare rBottom s resultStr 'b')
-someFunc = print (solve exampleStr 0 25 5 resultStr)
+--someFunc = print (solve exampleStr 0 25 5 resultStr)
+
+result1 = splitEvery 5 (solver 0 24 5 exampleStr resultStr)
+
+someFunc= do 
+  print(result1!!0)
+  print(result1!!1)
+  print(result1!!2)
+  print(result1!!3)
+  print(result1!!4)
+
 
 example :: [[Char]]
 example = 
@@ -198,7 +214,7 @@ getSquare i s_size pix c
 -- wywołuje próbe pokolorowania dla każdego znaczączego elementu planszy
 -- leci po kolei przez plansze, próbuje kolorować
 -- i - indeks dla którego zaczynamy rozwiązywanie 
--- n - dlugosc stringa będacego planszą
+-- n - największy indeks w tablicy będącej planszą
 -- s_size - długość boku planszy
 -- pix - plansza 
 -- result -- obecny stan pokolorowania planszy (kwadrat s_size x s_size wypełniany podczas rozwiązywania)
@@ -217,12 +233,5 @@ solver i n s_size pix result
 solve :: [Char] -> Int -> Int -> Int -> [Char] -> [Char]
 solve pix iter n s_size result = if iter >= n 
                           then result 
-                            else solve pix (iter+1) n s_size (solver 0 (s_size^2) s_size pix result)
---solve _  result = result
+                            else solve pix (iter+1) n s_size (solver 0 (s_size^2 - 1) s_size pix result)
 
-
---takeSquare :: (pix -> i -> square) -> [pix] -> i -> [square]
-
---["0.44.", ".4.6.", "3.76.", ".6.65", "....3"]
-
---result = ["c","b", "n"]
