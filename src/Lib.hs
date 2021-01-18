@@ -8,17 +8,16 @@ import System.IO (readFile)
 printResults :: IO ()
 printResults = do
   filepath <- getLine 
-  -- content <- readFile "/home/jakub/SPOP/haskell-nightmare-solver/data/basic/20-na-20"
   content <- readFile filepath
   let pix = read content ::[String]         --wczytana plansza
   let s_size = length pix                   --długość boku planszy
   let pixAsString = concat pix              --plansza jako pojedynczy string
   let resultStr = replicate (s_size^2) 'n'  --stan pokolorowania planszy
-  -- let results = splitEvery s_size (solve pixAsString 0 (s_size^2) s_size resultStr)
   let results = solve pixAsString 0 (s_size^2) s_size resultStr
   let visibleResults = splitEvery s_size (map printPretty results)
   mapM_ print visibleResults
 
+-- Zamienia litery w rozwiązaniu na drukowalne znaki
 printPretty :: Char -> Char  
 printPretty x = case x of 'w' -> ' '  
                           'b' -> '@'   
@@ -34,15 +33,13 @@ splitEvery n list = first : splitEvery n rest
   where
     (first,rest) = splitAt n list
 
-
- -- zliczanie elementów w tablicy
- -- a - element zliczany
- -- [a] - tablica w której zliczamy element
+-- Metoda zliczająca wystąpienia danego elementu w przekazanej tablicy
+-- a - element zliczany
+-- [a] - tablica w której zliczamy element
 count :: Eq a => a -> [a] -> Int
 count x = length . filter (x==) 
  
- -- Zwraca indeksy elementów planszy, które znajdują się w kwadracie 3x3 o środku w i
- -- Konieczne do zamalowywania obszaru, aby próbowac zamalowywać tylko elementy planszy, a nie sąsiednie
+-- Wyznacza obszar 3x3 wokół wybranego punktu planszy. Zwraca tylko te indeksy, które mieszczą się wewnątrz planszy
 -- i - indeks elementu bedacego srodkiem kwadratu 3x3
 -- s_size - długośc boku planszy
 returnSquareIndexes :: Int -> Int -> [Int]
@@ -71,12 +68,11 @@ returnSquareIndexes i s_size
     rightTop = s_size - 1
     rightBottom = s_size^2 - 1
 
--- Zamalowuje kwadrat 3x3 o środku w i na wskazany kolor c
--- c - znak ktory wstawiamy w miejsce 'n' (kolor. 'b' - black, 'w' - while)
+-- Zamalowuje wskazane indeksy na wskazany kolor c
+-- c - znak ktory wstawiamy w miejsce 'n' (kolor. 'b' - black, 'w' - white)
 -- i - indeks aktualnie obrabianego punktu w przekazanej liście(planszy)
 -- indexes - indeksy listy (r:restResults) które mamy spróbować zamalować(zamienić 'n' na wskazany jako c znak)
--- (r:restResults) - lista której elementy malujemy (plansza resultatów)
--- 
+-- (r:restResults) - lista której elementy malujemy (plansza rezultatów)
 fill :: Char -> Int -> [Int] -> [Char] -> [Char]    
 fill _ _ _ [] = []    
 fill c i indexes (r:restResults)
@@ -84,8 +80,8 @@ fill c i indexes (r:restResults)
  | otherwise = r:fill c (i+1) indexes restResults
 
      
--- próba zamalowania kwadratu 3x3 o środku w i 
--- sprawdza po kolei, czy da sie zastosować któraś z reguł kolorowania planszy
+-- Próba rozwiązania kwadratu 3x3 w punkcie i. Punkt ten zawiera wskazówkę liczbową
+-- Sprawdza po kolei, czy da sie zastosować którąś z reguł kolorowania planszy
 -- jeśli tak, przetwarza stan pokolorowania "result" tak, aby zamalować elementy "niewiadome" 'n' na odpowiedni kolor
 -- zwraca stan pokolorowania planszy po przetworzeniu obecnego kwadratu 3x3   
 -- i - srodek kwadratu 3x3 który próbujemy pomalować
@@ -105,12 +101,11 @@ processOneSquare i s_size pix square_result result
   fill 'b' 0 (returnSquareIndexes i s_size) result
  | otherwise = result
  where 
-  field_num = digitToInt (pix!!i) 
-  n_cnt = count 'n' square_result
-  b_cnt = count 'b' square_result
+  field_num = digitToInt (pix!!i) -- wyznaczenie numerka w danym polu 
+  n_cnt = count 'n' square_result -- zliczenie "niewiadomych" pól
+  b_cnt = count 'b' square_result -- zliczenie czarnych pól
   b_n_sum = n_cnt + b_cnt
   
-
 -- zwraca kwadrat 3x3 z planszy pix którego środek znajduje się w i. 
 -- Jeśli srodek kwadratu znajduje sie na brzegu planszy - uzupełnia kwadrat znakiem c 
 -- Potrzebne w celu pobierania kwadratów 3x3 z listy opisującej plansze, oraz z listy opisująćek stan pokolorowania planszy 
@@ -179,9 +174,8 @@ getSquare i s_size pix c
     rightTop = s_size - 1
     rightBottom = s_size^2 - 1
 
--- wywołuje próbe pokolorowania dla każdego znaczączego elementu(zawierająćego numere) planszy
--- leci po kolei przez plansze, próbuje kolorować
--- i - indeks dla którego zaczynamy rozwiązywanie 
+-- wywołuje próbe pokolorowania dla każdego znaczączego elementu(zawierającego numer) planszy
+-- i - indeks od którego zaczynamy rozwiązywanie
 -- n - dlugosc listy (planszy)
 -- s_size - długość boku planszy
 -- pix - plansza 
